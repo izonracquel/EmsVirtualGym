@@ -1,0 +1,6 @@
+Opening = 10 sec
+Bench Press, Barbell = 3.2 sec
+Dumbbell Biceps Curl = 6.6 sec
+Dumbbell Side Raise = 4.3 sec
+Dumbbell Wrist Curl = 3 sec
+Crunch = 5 sec

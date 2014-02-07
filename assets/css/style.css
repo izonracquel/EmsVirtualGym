@@ -1,0 +1,70 @@
+* { font-family: 'Segoe UI Light' !important; box-shadow: none !important; text-shadow: none !important; font-weight: normal !important; }
+i { font-family: 'FontAwesome' !important;}
+.page { background: #FFF; border: none; }
+.btn { border-radius: 0px; color: #FFF !important; text-shadow: none !important; }
+.header { width: 100%; position: fixed; top: 0px; padding: 15px; background: #424242; color: #FFF; font-size:16px; z-index: 999; }
+.footer { width: 100%; position: fixed; bottom: 0px; padding: 15px; border-top: 1px solid #ddd; background: #FFF; }
+.body {
+	padding-top: 50px;
+	padding-bottom: 70px;
+}
+
+.ui-input-text {
+	border-radius: 0px !important;
+	padding: 0px !important;
+	margin: 0px;
+}
+
+.activity-search-container .ui-input-text {
+	background: #6B6B6B;
+	color: #FFF;
+	border: none;
+	
+	padding: 5px 0px 3px 13px !important;
+}
+.activity-search-container {
+	padding: 10px;
+	background: #6B6B6B
+}
+.span6 { float: left; }
+.span6 { width: 50%; padding: 0px 15px 0px 15px; }
+.input-block { width: 100%; }
+
+.back-icon ,
+.calendar-back,
+.activity-refresh {
+	font-size: 20px;
+	cursor: pointer;
+	color: #FFF !important;
+}
+ul.activity-list {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+ul.activity-list li:hover {
+	background: #F8F8F8;
+}
+ul.activity-list li.active{
+	background: rgba(65, 148, 255, 0.62);
+	color: #FFF;
+}
+.activity-container {
+	padding: 5px;
+	border-bottom: 1px solid #EEEEEE;
+	height: 91px;
+}
+.activity-container .image {
+	width: 90px;
+	float: left;
+}
+.activity-container .data {
+	
+}
+.activity-container .activity {
+	padding: 5px 0px 0px 0px;
+	font-size: 20px;
+}
+.activity-container .category {
+	padding: 10px 0px 0px 0px;
+}

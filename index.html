@@ -1,0 +1,3416 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.75, user-scalable=no, minimum-scale=0.75, maximum-scale=0.75" />
+	<link rel="stylesheet" href="themes/B.min.css" />
+
+	
+	<link rel="stylesheet" href="assets/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/calendar/css/style.css">
+	
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.2.min.css" />
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js"></script>
+	<script src='js/jquery-1.10.2.min.js'></script>
+	<script src='js/jquery-ui-1.10.3.custom.min.js'></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/db.js"></script>
+
+	<script src="assets/js/fun-r.js"></script>
+	<script src="assets/calendar/js/script.js"></script>
+	
+	
+	<script>
+	$(document).ready(function(){
+		
+		
+		
+		
+	$('.calendar').calendar({
+		next: '<i class="fa fa-arrow-right"></i>',
+		prev: '<i class="fa fa-arrow-left"></i>',
+		onDateClick : function(){
+
+			$('.calendar-date-container').not('.date-disabled').not('.date-hide').on('click', function(){
+				localStorage.setItem('add-workout-activity-date', $(this).data('stamp'));
+				//$('.workout-activity-date').html(toDate(localStorage.getItem('add-workout-activity-date'), 'J F d, Y'));
+				$('#lblDate').html(toDate(localStorage.getItem('add-workout-activity-date'), 'F d, Y'));
+				window.location = '#pgActivity';
+			});
+		}
+	});
+		
+		
+		
+		
+		
+		$('#btnLogin').click(function(){
+		
+			$.get('http://gcccs.org/emsgym/login.php', {
+				username: $('#un').val(),
+				password: $('#pw').val()
+			}, function(j){
+			
+				console.log(j);
+				
+				if(j == '1'){
+				
+				$('#pStatus').html("Invalid Username/Password");
+				$('#pw').val("");
+					
+				}else{
+					window.location = '#main';
+					console.log(j);
+					localStorage.setItem("fldLoggedIn", "true");
+					console.log("Logged In Data Successfully Saved");
+					localStorage.setItem("UserLoggedIn",document.getElementById('un').value);
+					console.log("User Logged In Data Successfully Saved");
+					document.getElementById('up_username').innerHTML = "Logged in as "+localStorage.getItem("UserLoggedIn");
+					console.log("Logged in as "+localStorage.getItem("UserLoggedIn"));
+					document.getElementById("un").value = "";
+					document.getElementById("pw").value = "";
+				}
+			});		
+		});
+		
+			
+	
+
+		
+		$('#fld_un').keyup(function(){
+			bawal = "`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?";
+			username = $('#fld_un').val();
+			for(i in bawal){ username = username.replace(bawal[i], '');}
+			$('#fld_un').val(username);
+		});
+		
+		$('#btnReset').click(function(){
+		$('#fld_email').focus();
+		$('#fld_email').val("");
+		$('#fld_un').val("");
+		$('#fld_pw').val("");
+		$('#fld_rpw').val("");
+		$('#fld_ln').val("");
+		$('#fld_fn').val("");
+		$('#fld_mn').val("");
+		$('#fld_bday').val("");
+		$('#fld_gender').val("");
+		$('#fld_loc').val("");
+		$('#fld_contact').val("");
+		
+		$('#regStatusEmail').html("");
+		$('#regStatusUn').html("");
+		$('#regStatusPw').html("");
+		$('#regStatusName').html("");
+		$('#regStatusBday').html("");
+		$('#regStatusGender').html("");
+		$('#regStatusLoc').html("");
+		$('#regStatusContact').html("");
+		});
+		
+		
+		$('#btnRegister').click(function(){
+			if(($('#fld_pw').val())!=($('#fld_rpw').val())){
+				$('#fld_pw').focus();
+				$('#regStatusPw').html('Password did not matched');
+				
+			}
+			else if($('#fld_email').val()==""){
+				$('#fld_email').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusEmail').html('Email is required');	
+				
+			}
+			else if($('#fld_un').val()==""){
+				$('#fld_un').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusUn').html('Username is required');
+				
+			}
+			else if($('#fld_pw').val()==""){
+				$('#fld_pw').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusPw').html('Password is required');
+				
+			}
+			else if($('#fld_rpw').val()==""){
+				$('#fld_rpw').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusPw').html('Re-Type Password is required');
+			
+			}
+			else if($('#fld_ln').val()==""){
+				$('#fld_ln').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusName').html('Last Name is required');
+				
+			}
+			else if($('#fld_fn').val()==""){
+				$('#fld_fn').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusName').html('First Name is required');
+				
+			}
+			else if($('#fld_bday').val()==""){
+				$('#fld_bday').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusBday').html('Date of Birth is required');
+
+			}
+			else if($('#fld_gender').val()==""){
+				$('#fld_gender').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusGender').html('Gender is required');
+		
+			}
+			else if($('#fld_loc').val()==""){
+				$('#fld_loc').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusLoc').html('Location is required');
+			
+			}
+			else if($('#fld_contact').val()==""){
+				$('#fld_contact').focus();
+				$('#regStatusEmail').html("");
+				$('#regStatusUn').html("");
+				$('#regStatusPw').html("");
+				$('#regStatusName').html("");
+				$('#regStatusBday').html("");
+				$('#regStatusGender').html("");
+				$('#regStatusLoc').html("");
+				$('#regStatusContact').html("");
+				$('#regStatusContact').html('Contact Info is required');
+	
+			}
+
+			
+			
+			else{
+				$.post('http://gcccs.org/emsgym/check.php', {
+						username: $('#fld_un').val()
+					}
+					, function(j){
+						console.log(j);
+					
+						if(j == '1'){
+							$.post('http://gcccs.org/emsgym/test.php', {
+								email: $('#fld_email').val() ,
+								username: $('#fld_un').val() ,
+								password: $('#fld_pw').val() ,
+								lname: $('#fld_ln').val() ,
+								fname: $('#fld_fn').val() ,
+								mname: $('#fld_mn').val() ,
+								dob:  $('#fld_bday').val() ,
+								gender:  $('#fld_gender').val() ,
+								contact: $('#fld_contact').val() ,
+								country: $('#fld_loc').val()				
+							}, function(i){
+								
+								window.location = '#dialogRegSuccess';
+								console.log(i);
+								
+							});	
+						}else{
+							$('#fld_un').focus();
+							$('#regStatusEmail').html("");
+							$('#regStatusUn').html("");
+							$('#regStatusPw').html("");
+							$('#regStatusName').html("");
+							$('#regStatusBday').html("");
+							$('#regStatusGender').html("");
+							$('#regStatusLoc').html("");
+							$('#regStatusContact').html("");
+							$('#regStatusUn').html('Username already exists');
+						}
+					});			
+			}
+		});
+	});
+	</script>
+
+
+	
+	<!--
+	<script src="js/time.js"></script>
+	<link rel="stylesheet" href="css/BlackBerry-JQM-all.css" />
+	<script src="js/BlackBerry-JQM-all.js"></script>
+	
+		<link href='css/fullcalendar.css' rel='stylesheet' />
+		<link href='css/fullcalendar.print.css' rel='stylesheet' media='print' />
+	
+		<script src='js/fullcalendar.min.js'></script>
+	-->
+<style type="text/css">
+	#body {
+    position:fixed;
+    top:0;
+    left:0;
+	height:100%;
+	width:100%;
+	background-color:white;
+	background: url(images/EmsPhysicalGym.jpg) 0 0 no-repeat fixed !important;
+    background-size:contain;
+	}
+	.ui-page {
+	background: transparent!important;
+	}
+	.ui-content {
+	background: transparent!important;
+	}
+	</style>
+	<script>
+
+
+		
+	</script>
+
+		
+<!--
+	
+		$(document).ready(function() {
+	
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		
+		var calendar = $('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			selectable: true,
+			selectHelper: true,
+			select: function(start, end, allDay) {
+				var title = prompt('Event Title:');
+				if (title) {
+					calendar.fullCalendar('renderEvent',
+						{
+							title: title,
+							start: start,
+							end: end,
+							allDay: allDay
+						},
+						true // make the event "stick"
+					);
+				}
+				calendar.fullCalendar('unselect');
+			},
+			editable: true,
+			events: [
+				{
+					title: 'All Day Event',
+					start: new Date(y, m, 1)
+				},
+				{
+					title: 'Long Event',
+					start: new Date(y, m, d-5),
+					end: new Date(y, m, d-2)
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: new Date(y, m, d-3, 16, 0),
+					allDay: false
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: new Date(y, m, d+4, 16, 0),
+					allDay: false
+				},
+				{
+					title: 'Meeting',
+					start: new Date(y, m, d, 10, 30),
+					allDay: false
+				},
+				{
+					title: 'Lunch',
+					start: new Date(y, m, d, 12, 0),
+					end: new Date(y, m, d, 14, 0),
+					allDay: false
+				},
+				{
+					title: 'Birthday Party',
+					start: new Date(y, m, d+1, 19, 0),
+					end: new Date(y, m, d+1, 22, 30),
+					allDay: false
+				},
+				{
+					title: 'Click for Google',
+					start: new Date(y, m, 28),
+					end: new Date(y, m, 29),
+					url: 'http://google.com/'
+				}
+			]
+		});
+		
+	});
+-->
+
+<!--
+	<style>
+
+		
+
+	#calendar {
+		margin-top: 40px;
+		text-align: center;
+		font-size: 14px;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		width: 100%;
+		margin: 0 auto;
+		}
+
+
+</style>
+-->
+
+</head>
+<body onLoad="getData()">
+
+<div data-role="page" data-theme="b" id="login">
+
+	
+	
+	
+	
+	
+		<a onClick="LoggedInValidate()"><image id="imgOpening" src="images/gif/ems-opening-gif.gif" style="height:100%;width:100%"></image></a>
+	<!-- without login	
+		<a href="#main" data-role="button" data-icon="star" data-theme="d" data-transition="pop"><b>Enter Em's Virtual Gym</b></a>
+	-->
+	
+	</div>
+	
+</div>
+
+<!-- Log In Page -->
+<div data-role="page" data-theme="d" id="popupLogin">
+
+	<div data-role="header">
+		<div style="background-image:url(images/bg.jpg);
+			background-repeat:no-repeat;
+		background-size:cover;">
+				<center>
+				<image src="images/EmsGymLogo.png" alt="Em's Gym Logo" style="width:60%;height:60%"></image></center>
+			
+		</div>
+	</div>
+	
+	<div data-role="content" data-theme="d">
+		<div style="padding:10px 20px;">
+			<center>
+				<b><p>Please sign in to continue:</p></b>
+				<b><font id="pStatus" color="red"></font></b>
+			</center>
+				<label for="un" class="ui-hidden-accessible" >Username:</label>
+				<input type="text" name="user" id="un" value="" placeholder="username" data-theme="d" required>
+				<label for="pw" class="ui-hidden-accessible">Password:</label>
+				<input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="d" required>
+				<center><a href="#dialogReg">Not yet a member?</a></center>
+				<button name="btnSign" id="btnLogin" data-rel="dialog" data-role="button" data-theme="f" data-icon="check">Sign in</button>
+				<a href="#login" data-role="button" data-theme="e" data-icon="delete">Cancel</a>
+			</div>
+		
+	
+	</div>
+	
+</div>
+
+<!-- Registration Page -->
+
+	<div data-role="page" id="dialogReg" data-theme="d" data-close-btn="none">
+		<div data-role="header" style="height:50px">
+		<center><h3>Register New Member</h3></center>
+		</div>
+		
+		
+	<div data-role="content">
+		<div name="frmRegistration">
+			
+				<label for="fld_email" data-inline="true"><b>Email:</b></label>
+				<center><b><font color="red" id="regStatusEmail"></font></b></center>
+				<input type="email" data-inline="true" name="regEmail" id="fld_email" value="" placeholder="sample@email.com" data-theme="d" data-clear-btn="true" required>
+				
+				<label for="fld_un" data-inline="true"><b>User Name:</b></label>
+				<center><b><font color="red" id="regStatusUn"></font></b></center>
+				
+				<input type="text" data-inline="true" name="regUN" id="fld_un" value="" placeholder="Username" data-theme="d" data-clear-btn="true" required>
+				
+				<label for="fld_pw" data-inline="true"><b>Password:</b></label>
+				<center><b><font color="red" id="regStatusPw"></font></b></center>
+				<input type="password" data-inline="true" name="regPass" id="fld_pw" value="" placeholder="Password" data-theme="d" data-clear-btn="true" required>
+				<input type="password" data-inline="true" name="regRePass" id="fld_rpw" value="" placeholder="Re-Type Password" data-theme="d" data-clear-btn="true" required>
+			
+				<label for="fld_ln" data-inline="true"><b>Name:</b></label>
+				<center><b><font color="red" id="regStatusName"></font></b></center>
+				<input type="text" data-inline="true" name="regLN" id="fld_ln" value="" placeholder="Last Name" data-theme="d" data-clear-btn="true" required>
+				<input type="text" data-inline="true" name="regFN" id="fld_fn" value="" placeholder="First Name" data-theme="d" data-clear-btn="true" required>
+				<input type="text" data-inline="true" name="regMN" id="fld_mn" value="" placeholder="Middle Name" data-theme="d" data-clear-btn="true">
+				
+				<label for="fld_bday" data-inline="true"><b>Date of Birth:</b></label>
+				<center><b><font color="red" id="regStatusBday"></font></b></center>
+				<input type="date" data-inline="true" name="regBday" id="fld_bday" value="" data-theme="d" data-clear-btn="true" required>
+				
+				
+				<label for="fld_gender" data-inline="true" ><b>Gender:</b></label>
+				<center><b><font color="red" id="regStatusGender"></font></b></center>
+				<select name="regGender" id="fld_gender" data-theme="d">
+					<option value=""></option>
+					<option value="Male">Male</option>
+					<option value="Female">Female</option>
+					<option value="Other">Other</option>
+				</select>
+				
+				<label for="fld_loc"><b>Location:</b></label>
+				<center><b><font color="red" id="regStatusLoc"></font></b></center>
+				<select name="regLOC" id="fld_loc">
+					<option value=""></option>
+					<option value="Afghanistan">Afghanistan</option>
+					<option value="Albania">Albania</option>
+					<option value="Algeria">Algeria</option>
+					<option value="Andorra">Andorra</option>
+					<option value="Angola">Angola</option>
+					<option value="Antigua and Barbuda">Antigua and Barbuda</option>
+					<option value="Argentina">Argentina</option>
+					<option value="Armenia">Armenia</option>
+					<option value="Aruba">Aruba</option>
+					<option value="Australia">Australia</option>
+					<option value="Austria">Austria</option>
+					<option value="Azerbaijan">Azerbaijan</option>
+					<option value="Bahamas, The">Bahamas, The</option>
+					<option value="Bahrain">Bahrain</option>
+					<option value="Bangladesh">Bangladesh</option>
+					<option value="Barbados">Barbados</option>
+					<option value="Belarus">Belarus</option>
+					<option value="Belgium">Belgium</option>
+					<option value="Belize">Belize</option>
+					<option value="Benin">Benin</option>
+					<option value="Bhutan">Bhutan</option>
+					<option value="Bolivia">Bolivia</option>
+					<option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+					<option value="Botswana">Botswana</option>
+					<option value="Brazil">Brazil</option>
+					<option value="Brunei">Brunei</option>
+					<option value="Bulgaria">Bulgaria</option>
+					<option value="Burkina Faso">Burkina Faso</option>
+					<option value="Burma">Burma</option>
+					<option value="Burundi">Burundi</option>
+					<option value="Cambodia">Cambodia</option>
+					<option value="Cameroon">Cameroon</option>
+					<option value="Canada">Canada</option>
+					<option value="Cape Verde">Cape Verde</option>
+					<option value="Central African Republic">Central African Republic</option>
+					<option value="Chad">Chad</option>
+					<option value="Chile">Chile</option>
+					<option value="China">China</option>
+					<option value="Colombia">Colombia</option>
+					<option value="Comoros">Comoros</option>
+					<option value="Congo, Democratic Republic of the">Congo, Democratic Republic of the</option>
+					<option value="Congo, Republic of the">Congo, Republic of the</option>
+					<option value="Costa Rica">Costa Rica</option>
+					<option value="Cote d'Ivoire">Cote d'Ivoire</option>
+					<option value="Croatia">Croatia</option>
+					<option value="Cuba">Cuba</option>
+					<option value="Curacao">Curacao</option>
+					<option value="Cyprus">Cyprus</option>
+					<option value="Czech Republic">Czech Republic</option>
+					<option value="Denmark">Denmark</option>
+					<option value="Djibouti">Djibouti</option>
+					<option value="Dominica">Dominica</option>
+					<option value="Dominican Republic">Dominican Republic</option>
+					<option value="East Timor">East Timor</option>
+					<option value="Ecuador">Ecuador</option>
+					<option value="Egypt">Egypt</option>
+					<option value="El Salvador">El Salvador</option>
+					<option value="Equatorial Guinea">Equatorial Guinea</option>
+					<option value="Eritrea">Eritrea</option>
+					<option value="Estonia">Estonia</option>
+					<option value="Ethiopia">Ethiopia</option>
+					<option value="Fiji">Fiji</option>
+					<option value="Finland">Finland</option>
+					<option value="France">France</option>
+					<option value="Gabon">Gabon</option>
+					<option value="Gambia, The">Gambia, The</option>
+					<option value="Georgia">Georgia</option>
+					<option value="Germany">Germany</option>
+					<option value="Ghana">Ghana</option>
+					<option value="Greece">Greece</option>
+					<option value="Grenada">Grenada</option>
+					<option value="Guatemala">Guatemala</option>
+					<option value="Guinea">Guinea</option>
+					<option value="Guinea-Bissau">Guinea-Bissau</option>
+					<option value="Guyana">Guyana</option>
+					<option value="Haiti">Haiti</option>
+					<option value="Holy See">Holy See</option>
+					<option value="Honduras">Honduras</option>
+					<option value="Hong Kong">Hong Kong</option>
+					<option value="Hungary">Hungary</option>
+					<option value="Iceland">Iceland</option>
+					<option value="India">India</option>
+					<option value="Indonesia">Indonesia</option>
+					<option value="Iran">Iran</option>
+					<option value="Iraq">Iraq</option>
+					<option value="Ireland">Ireland</option>
+					<option value="Israel">Israel</option>
+					<option value="Italy">Italy</option>
+					<option value="Jamaica">Jamaica</option>
+					<option value="Japan">Japan</option>
+					<option value="Jordan">Jordan</option>
+					<option value="Kazakhstan">Kazakhstan</option>
+					<option value="Kenya">Kenya</option>
+					<option value="Kiribati">Kiribati</option>
+					<option value="Korea, North">Korea, North</option>
+					<option value="Korea, North">Korea, North</option>
+					<option value="Kosovo">Kosovo</option>
+					<option value="Kuwait">Kuwait</option>
+					<option value="Kyrgyzstan">Kyrgyzstan</option>
+					<option value="Laos">Laos</option>
+					<option value="Latvia">Latvia</option>
+					<option value="Lebanon">Lebanon</option>
+					<option value="Lesotho">Lesotho</option>
+					<option value="Liberia">Liberia</option>
+					<option value="Libya">Libya</option>
+					<option value="Liechtenstein">Liechtenstein</option>
+					<option value="Lithuania">Lithuania</option>
+					<option value="Luxembourg">Luxembourg</option>
+					<option value="Macau">Macau</option>
+					<option value="Macedonia">Macedonia</option>
+					<option value="Madagascar">Madagascar</option>
+					<option value="Malawi">Malawi</option>
+					<option value="Malaysia">Malaysia</option>
+					<option value="Maldives">Maldives</option>
+					<option value="Mali">Mali</option>
+					<option value="Malta">Malta</option>
+					<option value="Marshall Islands">Marshall Islands</option>
+					<option value="Mauritania">Mauritania</option>
+					<option value="Mauritius">Mauritius</option>
+					<option value="Mexico">Mexico</option>
+					<option value="Micronesia">Micronesia</option>
+					<option value="Moldova">Moldova</option>
+					<option value="Monaco">Monaco</option>
+					<option value="Mongolia">Mongolia</option>
+					<option value="Montenegro">Montenegro</option>
+					<option value="Morocco">Morocco</option>
+					<option value="Mozambique">Mozambique</option>
+					<option value="Namibia">Namibia</option>
+					<option value="Nauru">Nauru</option>
+					<option value="Nepal">Nepal</option>
+					<option value="Netherlands">Netherlands</option>
+					<option value="Netherlands Antilles">Netherlands Antilles</option>
+					<option value="New Zealand">New Zealand</option>
+					<option value="Nicaragua">Nicaragua</option>
+					<option value="Niger">Niger</option>
+					<option value="Nigeria">Nigeria</option>
+					<option value="North Korea">North Korea</option>
+					<option value="Norway">Norway</option>
+					<option value="Oman">Oman</option>
+					<option value="Pakistan">Pakistan</option>
+					<option value="Palau">Palau</option>
+					<option value="Palestinian Territories">Palestinian Territories</option>
+					<option value="Panama">Panama</option>
+					<option value="Papua New Guinea">Papua New Guinea</option>
+					<option value="Papua New Guinea">Papua New Guinea</option>
+					<option value="Paraguay">Paraguay</option>
+					<option value="Peru">Peru</option>
+					<option value="Philippines">Philippines</option>
+					<option value="Poland">Poland</option>
+					<option value="Portugal">Portugal</option>
+					<option value="Qatar">Qatar</option>
+					<option value="Romania">Romania</option>
+					<option value="Russia">Russia</option>
+					<option value="Rwanda">Rwanda</option>
+					<option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+					<option value="Saint Lucia">Saint Lucia</option>
+					<option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+					<option value="Samoa">Samoa</option>
+					<option value="San Marino">San Marino</option>
+					<option value="Sao Tome and Principe">Sao Tome and Principe</option>
+					<option value="Saudi Arabia">Saudi Arabia</option>
+					<option value="Senegal">Senegal</option>
+					<option value="Serbia">Serbia</option>
+					<option value="Seychelles">Seychelles</option>
+					<option value="Sierra Leone">Sierra Leone</option>
+					<option value="Singapore">Singapore</option>
+					<option value="Sint Maarten">Sint Maarten</option>
+					<option value="Slovakia">Slovakia</option>
+					<option value="Slovenia">Slovenia</option>
+					<option value="Solomon Islands">Solomon Islands</option>
+					<option value="Somalia">Somalia</option>
+					<option value="South Africa">South Africa</option>
+					<option value="South Korea">South Korea</option>
+					<option value="South Sudan">South Sudan</option>
+					<option value="Spain">Spain</option>
+					<option value="Sri Lanka">Sri Lanka</option>
+					<option value="Sudan">Sudan</option>
+					<option value="Suriname">Suriname</option>
+					<option value="Swaziland">Swaziland</option>
+					<option value="Sweden">Sweden</option>
+					<option value="Switzerland">Switzerland</option>
+					<option value="Syria">Syria</option>
+					<option value="Taiwan">Taiwan</option>
+					<option value="Tajikistan">Tajikistan</option>
+					<option value="Tanzania">Tanzania</option>
+					<option value="Thailand">Thailand</option>
+					<option value="Timor-Leste">Timor-Leste</option>
+					<option value="Togo">Togo</option>
+					<option value="Tonga">Tonga</option>
+					<option value="Trinidad and Tobago">Trinidad and Tobago</option>
+					<option value="Tunisia">Tunisia</option>
+					<option value="Turkey">Turkey</option>
+					<option value="Turkmenistan">Turkmenistan</option>
+					<option value="Tuvalu">Tuvalu</option>
+					<option value="Uganda">Uganda</option>
+					<option value="Ukraine">Ukraine</option>
+					<option value="United Arab Emirates">United Arab Emirates</option>
+					<option value="United Kingdom">United Kingdom</option>
+					<option value="Uruguay">Uruguay</option>
+					<option value="Uzbekistan">Uzbekistan</option>
+					<option value="Vanuatu">Vanuatu</option>
+					<option value="Venezuela">Venezuela</option>
+					<option value="Vietnam">Vietnam</option>
+					<option value="Yemen">Yemen</option>
+					<option value="Zambia">Zambia</option>
+					<option value="Zimbabwe">Zimbabwe</option>
+				</select>
+				
+				<label for="fld_contact" data-inline="true"><b>Contact Info:</b></label>
+				<center><b><font color="red" id="regStatusContact"></font></b></center>
+				<input type="number" data-inline="true" name="regContact" id="fld_contact" value="" data-theme="d" data-clear-btn="true">
+				
+				
+				<br/>
+				<input type="button" id="btnRegister" data-rel="dialog" data-transition="pop" data-role="button" data-theme="f" data-icon="check" value="Register" />
+				<input type="reset" id="btnReset" data-role="button" data-theme="d" data-icon="refresh" value="Reset" />
+				<a href="#popupLogin" data-role="button" data-theme="e" data-icon="delete">Cancel</a>
+		</div>
+
+			</div>
+	</div>
+	
+	
+	<!-- Registration Success Page -->
+<div data-role="page" data-theme="d" id="dialogRegSuccess">
+
+	<div data-role="header">
+		<div style="background-image:url(images/bg.jpg);
+			background-repeat:no-repeat;
+		background-size:cover;">
+				<center>
+				<image src="images/EmsGymLogo.png" alt="Em's Gym Logo" style="width:60%;height:60%"></image></center>
+			
+		</div>
+	</div>
+	
+	
+	<div data-role="content" data-theme="d">
+		<center>
+		<br/><br/>
+		<h2>Membership Registration Successful!</h2>
+		</center>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+	<ul>
+		<li>
+		<a href="#login" data-role="button" id="btnRegisterSuccess" data-icon="forward" data-iconpos="top" data-theme="d" data-role="button" >Continue</a>
+		</li>
+	</ul>
+	</div>
+	</div>
+	
+</div>
+
+
+<!-- main page -->
+<div data-role="page" data-theme="b" id="main">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onClick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d" >
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header" data-theme="b">
+		<div style="background-image:url(images/bg.jpg);
+			background-repeat:no-repeat;
+		background-size:cover;">
+				<center>
+				<image src="images/EmsGymLogo.png" alt="Em's Gym Logo" style="width:60%;height:60%"></image>
+				</center>
+		</div>
+	</div>
+	<div data-role="content" data-theme="b">
+	<center>
+		<image src="images/EmsPhysicalGym2.png" style="height:100%;width:100%"></image>
+	</center>
+	</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar" >
+		<ul>
+			<li><a href="#menu" class="ui-btn ui-btn-inline" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#settings" class="ui-btn ui-btn-inline" data-iconpos="notext" data-inline="true" data-role="button" data-icon="gear" data-iconpos="top">Settings</a></li>
+			<!--
+			<li><a href="#main" class="ui-btn ui-btn-inline" data-iconpos="notext" data-inline="true" data-role="button" data-icon="home" ></a></li>
+			-->
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- BMI Metric page -->
+<div data-role="page" data-theme="d" id="pgBMImtrc">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+		<h1>BMI Calculator</h1>
+    <div data-role="navbar" id="navbar">
+        <ul>
+            <li><a href="#pgBMImtrc" data-transition="none" data-theme="f">Metric</a></li>
+            <li><a href="#pgBMIstndrd" data-transition="none" >Standard</a></li>
+        </ul>
+    </div>
+	</div>
+	<div data-role="content">
+		<form name="bmiFormMetric">
+			<b>Your Weight:</b> 
+			<input type="number" name="weight" size="10" placeholder="kilograms(kg)" min="0" required><br />
+			<b>Your Height:</b> 
+			<input type="number" name="height" size="10" placeholder="centimeters(cm)" min="0" required><br />
+			<input type="button" data-theme="d" value="Calculate BMI" onClick="calculateBmiMetric()"><br />
+			<b>Your BMI:</b> <input type="text" data-theme="d" name="bmi" size="10" disabled><br />
+			<b>This Means:</b> <input type="text" data-theme="d" name="meaning" size="25" disabled><br />
+			<input type="reset" data-theme="d" value="Reset" />
+		</form>
+	</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- BMI Standard page -->
+<div data-role="page" data-theme="d" id="pgBMIstndrd">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+
+	</div>
+	<div data-role="header">
+		<h1>BMI Calculator</h1>
+		<div data-role="navbar" id="navbar">
+        <ul>
+            <li><a href="#pgBMImtrc" data-transition="none">Metric</a></li>
+            <li><a href="#pgBMIstndrd" data-transition="none" data-theme="f">Standard</a></li>
+        </ul>
+    </div>
+	</div>
+	<div data-role="content">
+	<form name="bmiFormStandard">
+		</center>
+			<b>Your Weight:</b> 
+			<input type="number" name="weight" size="10" placeholder="pounds(lb)" min="0" required><br />
+			<b>Your Height:</b> 
+			<input type="number" name="heightFT" size="10" placeholder="feet(ft)" min="0" required><br />
+			<input type="number" name="heightIN" size="10" placeholder="inches(in)" min="0" required><br />
+			<input type="button" data-theme="d" value="Calculate BMI" onClick="calculateBmiStandard()"><br />
+			<b>Your BMI:</b> <input type="text" data-theme="d" name="bmi" size="10" disabled><br />
+			<b>This Means:</b> <input type="text" data-theme="d" name="meaning" size="25" disabled><br />
+			<input type="reset" data-theme="d" value="Reset" />
+	</form>
+	</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- User Profile Page -->
+<div data-role="page" data-theme="d" id="pgUser">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+		<div style="background-image:url(images/bg.jpg);
+			background-repeat:no-repeat;
+		background-size:cover;">
+				<center>
+				<image src="images/EmsGymLogo.png" alt="Em's Gym Logo" style="width:60%;height:60%"></image></center>
+			
+		</div>
+	<div data-role="navbar" id="navbar">
+        <ul>
+            <li><a href="#pgUser" data-transition="none" data-theme="f">User Profile</a></li>
+            <li><a href="#pgProgress" data-transition="none">User Progress</a></li>
+        </ul>
+    </div>
+	</div>
+	<div data-role="content" data-theme="d" >
+	<center>
+	<b><font id="up_username"></font></b><br/><br/>
+	</center>
+	<a href="#login" onClick="btnLogOut()" data-role="button" data-theme="d" data-icon="refresh" >Log Out</a>
+	
+	
+</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- User Progress Page -->
+<div data-role="page" data-theme="d" id="pgProgress">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+		<div style="background-image:url(images/bg.jpg);
+			background-repeat:no-repeat;
+		background-size:cover;">
+				<center>
+				<image src="images/EmsGymLogo.png" alt="Em's Gym Logo" style="width:60%;height:60%"></image></center>
+			
+		</div>
+	<div data-role="navbar" id="navbar">
+        <ul>
+            <li><a href="#pgUser" data-transition="none">User Profile</a></li>
+            <li><a href="#pgProgress" data-transition="none" data-theme="f">User Progress</a></li>
+        </ul>
+    </div>
+	</div>
+	<div data-role="content" data-theme="d" >
+	
+	<br>
+	<div class="ui-grid-a">
+    <div class="ui-block-a" style="width:70%"><div class="ui-bar ui-bar-d" style="height:30px">Workout Type</div></div>
+    <div class="ui-block-b" style="width:30%"><div class="ui-bar ui-bar-d" style="height:30px"><center>Total Reps</center></div></div>
+	<div class="ui-block-a" style="width:70%"><div class="ui-bar ui-bar-e" style="height:30px">Dumbbell Side Raise</div></div>
+    <div class="ui-block-b" style="width:30%"><div class="ui-bar ui-bar-e" style="height:30px"><center><font id="dataDumbbellSideRaise">0</font></center></div></div>
+	<div class="ui-block-a" style="width:70%"><div class="ui-bar ui-bar-e" style="height:30px">Dumbbell Biceps Curl</div></div>
+    <div class="ui-block-b" style="width:30%"><div class="ui-bar ui-bar-e" style="height:30px"><center><font id="dataDumbbellBicepsCurl">0</font></center></div></div>
+	<div class="ui-block-a" style="width:70%"><div class="ui-bar ui-bar-e" style="height:30px">Dumbbell Wrist Curl</div></div>
+    <div class="ui-block-b" style="width:30%"><div class="ui-bar ui-bar-e" style="height:30px"><center><font id="dataDumbbellWristCurl">0</font></center></div></div>
+	<div class="ui-block-a" style="width:70%"><div class="ui-bar ui-bar-e" style="height:30px">Bench Press, Barbell</div></div>
+    <div class="ui-block-b" style="width:30%"><div class="ui-bar ui-bar-e" style="height:30px"><center><font id="dataBenchPressBarbell">0</font></center></div></div>
+	<div class="ui-block-a" style="width:70%"><div class="ui-bar ui-bar-e" style="height:30px">Crunch</div></div>
+    <div class="ui-block-b" style="width:30%"><div class="ui-bar ui-bar-e" style="height:30px"><center><font id="dataCrunch">0</font></center></div></div>
+</div>
+
+<a href="#clearData" data-rel="popup" data-position-to="window" data-role="button" data-transition="pop" data-icon="refresh" data-theme="d">Clear Data</a>
+
+<div data-role="popup" id="clearData" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Clear Data?</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <h3 class="ui-title">Are you sure you want to clear your data?</h3>
+		<center>
+        <p>This action cannot be undone.</p>
+		</center>
+		<center>
+        <a href="#" data-role="button" data-inline="true" data-rel="back" data-transition="pop" data-theme="d" onClick="clrData()">Clear Data</a>
+        <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="e">Cancel</a>
+		</center>
+    </div>
+</div>
+
+<!--	
+	<b><font>Shoulders:</font></b><br/>
+	<font>Dumbbell Side Raise</font> &nbsp <font id="txt_opt1"></font>
+	-->
+
+	
+	
+	<!--
+	<a href="#" onClick="" data-role="button" data-theme="d" data-icon="refresh" >Reset</a>
+	-->
+	
+		
+		
+</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+
+<!-- calendar page -->
+<div data-role="page" data-theme="d" id="calendar2">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+    <li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+	<li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header" data-theme="d">
+	<h1>Workout Calendar</h1>
+	</div>
+	<div data-role="content" data-theme="d" style="padding:0px;">
+<!--
+			<div id='calendar'></div>
+-->
+	
+
+	<div class="calendar" ></div>
+
+	</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- activity page -->
+<div data-role="page" data-theme="d" id="pgActivity">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+		<a href="#calendar2" data-icon="arrow-l" data-theme="f">Calendar</a>
+		<h1 id="lblDate">mm/dd/yy</h1>
+	</div>
+	<div data-role="content">
+	<ul data-role="listview" data-split-icon="delete" data-split-theme="d" data-inset="true" id="workout-list">
+	
+	</ul>
+	<a href="#workout" data-role="button" data-theme="f" >Add Workout</a>
+	</div>
+	
+<!-- popups -->
+<div data-role="popup" id="removeWOdumbbellsideraise" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Remove Workout?</h3></center>
+	<a href="#" id="remove-dumbbellsideraise" data-role="button" data-rel="back" data-theme="f" data-icon="delete"  data-inline="true">Remove</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="removeWOdumbbellbicepscurl" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Remove Workout?</h3></center>
+	<a href="#" id="remove-dumbbellbicepscurl" data-role="button" data-rel="back" data-theme="f" data-icon="delete"  data-inline="true">Remove</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="removeWOdumbbellwristcurl" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Remove Workout?</h3></center>
+	<a href="#" id="remove-dumbbellwristcurl" data-role="button" data-rel="back" data-theme="f" data-icon="delete"  data-inline="true">Remove</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="removeWObarbellbenchpress" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Remove Workout?</h3></center>
+	<a href="#" id="remove-barbellbenchpress" data-role="button" data-rel="back" data-theme="f" data-icon="delete"  data-inline="true">Remove</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="removeWOcrunch" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Remove Workout?</h3></center>
+	<a href="#" id="remove-crunch" data-role="button" data-rel="back" data-theme="f" data-icon="delete"  data-inline="true">Remove</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<script>
+	$(document).ready(function(){
+				
+				$('#remove-dumbbellsideraise').click(function(){
+						$('#wo_dumbbellsideraise').remove();
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#remove-dumbbellbicepscurl').click(function(){
+						$('#wo_dumbbellbicepscurl').remove();
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#remove-dumbbellwristcurl').click(function(){
+						$('#wo_dumbbellwristcurl').remove();
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#remove-barbellbenchpress').click(function(){
+						$('#wo_barbellbenchpress').remove();
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#remove-crunch').click(function(){
+						$('#wo_crunch').remove();
+					//	alert($(this).attr('data-workout'));
+				});
+
+	});
+	</script>
+<!-- end popups -->
+	
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+	
+	</div>
+
+<!-- end activity -->
+
+<!-- developer page -->
+<div data-role="page" data-theme="d" id="developers">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+		<h1>Developers</h1>
+	</div>
+	<div data-role="content">
+		<center><h2><font color="red">Gordon College</font>
+		<font color="orange">College of Computer Studies</font></h2></center>
+		<center><font">A premiere institution of higher learning committed to the holistic development of the human person and society.</font></center>
+		
+		<br/><br/><br/>
+	<center>
+		<b>Developers:</b><br/>
+		<b>(Team dotJAR)</b><br/>
+		<label>Janssen D. Delos Santos</label><br/>
+		<label>Ava Mae B. Andrade</label><br/>
+		<label>Racquel A. Izon</label><br/><br/><br/><br/><br/>
+		<label>check us on <a href="http://www.gordoncollegeccs.edu.ph">www.gordoncollegeccs.edu.ph</a></label>
+	</center>
+	</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- about page -->
+<div data-role="page" data-theme="d" id="about">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+<div data-role="header">
+<h1>About Em's Gym</h1>
+</div>
+
+<div data-role="content">
+<CENTER>
+<br/>
+<a href="#EMSpck1" style="width:75%" data-role="button" data-theme="d" data-icon="star" >Services</a> 
+<br/>
+<a href="#EMSlocation" style="width:75%" data-role="button" data-theme="d" data-icon="star" >Location</a>
+<br/>
+</CENTER></div>
+
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div></div>
+
+	
+<!-- services jang -->
+
+<div data-role="page" id="EMSpck1" data-theme="d">
+	<div data-role="header">
+		<a href="#about" data-icon="arrow-l" data-theme="f">About</a>
+		<h1>Em's Services</h1>
+	</div>
+	
+	<div data-role="content">
+		<ul data-role="listview"  id="pckSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#EMSpck1">Package 1</a></li>
+			<li><a href="#EMSpck2">Package 2</a></li>
+			<li><a href="#EMSpck3">Package 3</a></li>
+			<li><a href="#EMSpck4">Package 4</a></li>
+		</ul>
+		
+		<img src="images/shaping.jpg" style="width:100%;height:100%">
+		<center>
+				<br><b>PACKAGE #1</b>
+				<br>
+				<br>Personal Trainer - Boxing, Body Shaping
+				<br>1 month gym
+				<br>Free 20 mins. Treadmill
+				<br><br><i><b>Php 3,500</b></i>
+		</center>
+	</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a data-role="button" data-icon="arrow-l" data-iconpos="top"  onclick="goBack()" class="ui-disabled"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#EMSpck2" data-role="button" data-icon="arrow-r" data-iconpos="top" data-mini="true" data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<div data-role="page" id="EMSpck2" data-theme="d">
+	<div data-role="header">
+	<a href="#about" data-icon="arrow-l" data-theme="f">About</a>
+		<h1>Em's Services</h1>
+	</div>
+	
+	<div data-role="content">
+		<ul data-role="listview"  id="pckSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#EMSpck1">Package 1</a></li>
+			<li><a href="#EMSpck2">Package 2</a></li>
+			<li><a href="#EMSpck3">Package 3</a></li>
+			<li><a href="#EMSpck4">Package 4</a></li>
+		</ul>
+		
+		<img src="images/Boxing.jpg" style="width:100%;height:100%">
+		<center>
+				<br><b>PACKAGE #2</b>
+				<br>
+				<br>Boxing (3 times a week)
+				<br>1 month gym
+				<br>Free 15 mins. Treadmill
+				<br><br><i><b>Php 2,000</b></i>
+		</center>
+	</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a data-role="button" data-icon="arrow-l" data-iconpos="top"  onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#EMSpck3" data-role="button" data-icon="arrow-r" data-iconpos="top" data-mini="true" data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<div data-role="page" id="EMSpck3" data-theme="d">
+	<div data-role="header">
+	<a href="#about" data-icon="arrow-l" data-theme="f">About</a>
+		<h1>Em's Services</h1>
+	</div>
+	
+	<div data-role="content">
+		<ul data-role="listview"  id="pckSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#EMSpck1">Package 1</a></li>
+			<li><a href="#EMSpck2">Package 2</a></li>
+			<li><a href="#EMSpck3">Package 3</a></li>
+			<li><a href="#EMSpck4">Package 4</a></li>
+		</ul>
+		
+		<img src="images/Grappling.jpg" style="width:100%;height:100%">
+		<center>
+				<br><b>PACKAGE #3</b>
+				<br>
+				<br>Mixed-Martial Arts (1month)
+				<br>1 month gym
+				<br>Free 15 mins. Treadmill
+				<br><br><i><b>Php 4,000</b></i>
+		</center>
+	</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a data-role="button" data-icon="arrow-l" data-iconpos="top"  onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#EMSpck4" data-role="button" data-icon="arrow-r" data-iconpos="top" data-mini="true" data-transition="slide"><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<div data-role="page" id="EMSpck4" data-theme="d">
+	<div data-role="header">
+	<a href="#about" data-icon="arrow-l" data-theme="f">About</a>
+		<h1>Em's Services</h1>
+	</div>
+	
+	<div data-role="content">
+		<ul data-role="listview"  id="pckSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#EMSpck1">Package 1</a></li>
+			<li><a href="#EMSpck2">Package 2</a></li>
+			<li><a href="#EMSpck3">Package 3</a></li>
+			<li><a href="#EMSpck4">Package 4</a></li>
+		</ul>
+		
+		<img src="images/jiujitsu.jpg" style="width:100%;height:100%">
+		<center>
+				<br><b>PACKAGE #4</b>
+				<br>
+				<br>Instructor: Joey Alalim 
+				<br>Jiu-Jitsu(3 times a week)
+				<br>1 month gym
+				<br>Free 15 mins. Treadmill
+		</center>
+	</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a data-role="button" data-icon="arrow-l" data-iconpos="top"  onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#" data-role="button" data-icon="arrow-r" data-iconpos="top" data-mini="true" data-transition="slide" class="ui-disabled"><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- end services jang -->
+
+<!----location---->	
+
+<div data-role="page" data-theme="d" id="EMSlocation">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+	</ul>
+	</div>
+	<div data-role="header">
+	<a href="#about" data-icon="arrow-l" data-theme="f">About</a>
+		<h1>Em's Location</h1>
+	</div>
+	<div data-role="content">
+		
+		<center><b>Our Physical Gym is located at:</b></center>
+		<center><font align="justify">#995 Rizal Avenue, West Tapinac, Olongapo City, Philippines</font></center>
+		<br/>
+		<center><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Em's+Sparkle+Gym+olongapo&amp;aq=&amp;sll=37.0625,-95.677068&amp;sspn=40.052282,86.572266&amp;ie=UTF8&amp;hq=Em's+Sparkle+Gym&amp;hnear=Olongapo+City,+Zambales,+Central+Luzon,+Philippines&amp;ll=14.832368,120.280654&amp;spn=0.005984,0.010568&amp;t=m&amp;z=14&amp;iwloc=A&amp;cid=14046491889244642360" style="color:#0000FF;text-align:left"><small><image src="images/EmsLocation.png" alt="Em's Map" style="width:100%"></image></small></a></center>
+		<center><br>
+		<center><font color="627aa0">Like Us on Facebook:</font></center>
+		<center><a href="https://www.facebook.com/EmsSparkleGym.Official"><image src="images/EmsLike.png" alt="Em's Map" style="width:50%;height:50%"></image></a></center> 		
+	
+	</div>
+	
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div></div>
+	
+<!-- Animation End Page -->
+<div data-role="page" data-theme="b" id="pgAnimationEnd">
+
+	<div data-role="header">
+		<div style="background-image:url(images/bg.jpg);
+			background-repeat:no-repeat;
+		background-size:cover;">
+				<center>
+				<image src="images/EmsGymLogo.png" alt="Em's Gym Logo" style="width:60%;height:60%"></image></center>
+			
+		</div>
+	</div>
+	
+	
+	<div data-role="content" data-theme="b">
+		<center>
+		<h3 id="word_finish"></h3><br/>
+		<b><font id="word_setA"></font></b><br/>
+		<b><font id="word_setB"></font></b><br/>
+		<b><font id="word_setC"></font></b><br/>
+		<font>__________________________</font><br/>
+		<b><font id="word_Reps"></b></font>
+		</center>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+	<ul>
+		<li>
+		<a href="#pgActivity" data-role="button" data-theme="f" data-icon="forward" data-iconpos="top"  data-role="button" >Continue</a>
+		</li>
+	</ul>
+	</div>
+	</div>
+	
+</div>
+
+
+<!-- animation page -->
+<div data-role="page" data-theme="d" id="pgAnimation">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+	</ul>
+	</div>
+	<div data-role="header">
+	<a href="#" data-icon="back" data-theme="f" onclick="goBack()">Back</a>
+	<h1 id="headerAnimation">Workout Name</h1>
+	</div>
+	
+	
+	
+<!-- popup animation -->
+	<div data-role="popup" id="popupPlay" data-overlay-theme="d" data-theme="d" data-dismissible="false" data-corners="false" class="ui-corner-all">
+		<div class="ui-grid-a">
+		<div class="ui-block-a"><div class="ui-bar ui-bar-e">
+		<center><b>Rest Time</b></center>
+		</div></div>
+		<div class="ui-block-b"><div class="ui-bar ui-bar-e">
+		<center><font id="wo_rest" data-theme="d"></font></center>
+		</div></div>
+		</div>
+		<img class="popphoto" id="gifAnimation" src="images/gif/Opening.gif" style="height:100%;width:100%" alt="gif">
+		<div class="ui-grid-b">
+		<div class="ui-block-a"><div class="ui-bar ui-bar-e">
+		<center><b>Set A</b></center>
+		<center><font id="wo_setA" data-theme="d"></font></center>
+		</div></div>
+		<div class="ui-block-b"><div class="ui-bar ui-bar-e">
+		<center><b>Set B</b></center>
+		<center><font id="wo_setB" data-theme="d"></font></center>
+		</div></div>
+		<div class="ui-block-c"><div class="ui-bar ui-bar-e">
+		<center><b>Set C</b></center>
+		<center><font id="wo_setC" data-theme="d"></font></center>
+		</div>
+		</div>
+		
+	</div>
+	<a href="#pgAnimationEnd"  onClick="woEnd()" id="endWO" data-role="button" data-theme="d" data-corners="false" data-transition="pop" >End Workout</a>
+	</div>
+
+	
+	<div data-role="content">
+	<div class="ui-grid-a">
+		<div class="ui-block-a"><div class="ui-bar ui-bar-e" style="height:53px">
+		<br/>
+		<center><b>Rest Time</b></center>
+		</div></div>
+		<div class="ui-block-b"><div class="ui-bar ui-bar-e">
+		<input type="number" min="0" id="txt_rest" value="30">
+		</div></div>
+	</div>
+	<a href="#popupPlay" onClick="play()" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="images/play.png" alt="Play" style="width:100%"></a>
+	<div class="ui-grid-b">
+		<div class="ui-block-a"><div class="ui-bar ui-bar-e">
+		<center><b>Set A</b></center>
+		<input type="number" min="0" id="txt_setA" value="12">
+		</div></div>
+		<div class="ui-block-b"><div class="ui-bar ui-bar-e">
+		<center><b>Set B</b></center>
+		<input type="number" min="0" id="txt_setB" value="10">
+		</div></div>
+		<div class="ui-block-c"><div class="ui-bar ui-bar-e">
+		<center><b>Set C</b></center>
+		<input type="number" min="0" id="txt_setC" value="8">
+		</div></div>	
+	</div>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+
+</div>
+<!-- workout page -->
+<div data-role="page" data-theme="d" id="workout">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+	<a href="#pgActivity" data-icon="arrow-l" data-theme="f">Activity</a>
+		<h1>Workout</h1>
+		</div>
+	<div data-role="content" data-theme="d">
+	
+	<!-- workout search -->
+	
+	<ul id="WOsearch" data-role="listview" data-mini="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+    <li><a href="#addWOdumbbellsideraise" data-rel="popup" data-transition="slideup" data-workout="Dumbbell Side Raise" class="add-dumbbellsideraise" onClick="wo_DumbbellSideRaise()">
+        <img src="images/preview/DumbbellSideRaise.png">
+        <h2 id="woName">Dumbbell Side Raise</h2>
+        <p>Shoulders</p></a>
+        <a href="#tipsDSR" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+    <li><a href="#addWOdumbbellbicepscurl" data-rel="popup" data-transition="slideup" data-workout="Dumbbell Biceps Curl" class="add-dumbbellbicepscurl" onClick="wo_DumbbellBicepsCurl()">
+        <img src="images/preview/dumbellL.png">
+        <h2 id="woName">Dumbbell Biceps Curl</h2>
+        <p>Biceps</p></a>
+        <a href="#tipsDBC" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+    <li><a href="#addWOdumbbellwristcurl" data-rel="popup" data-transition="slideup" data-workout="Dumbbell Wrist Curl" class="add-dumbbellwristcurl" onClick="wo_DumbbellWristCurl()">
+        <img src="images/preview/DumbbellWristCurl.png">
+		<h2 id="woName">Dumbbell Wrist Curl</h2>
+		<p>Forearms</p></a>
+       <a href="#tipsDWC" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+	<li><a href="#addWObenchpressbarbell" data-rel="popup" data-transition="slideup" data-workout="Bench Press, Barbell" class="add-barbellbenchpress" onClick="wo_BarbellBenchPress()">
+        <img src="images/preview/BenchPress.png">
+		<h2 id="woName">Bench Press, Barbell</h2>
+		<p>Chest, Triceps, Front Shoulders</p></a>
+        <a href="#tipsBPB" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+	<li><a href="#addWOcrunch" data-rel="popup" data-transition="slideup" data-workout="Crunch" class="add-crunch" onClick="wo_Crunch()">
+        <img src="images/preview/Crunch.png">
+		<h2 id="woName">Crunch</h2>
+		<p>All Abs</p></a>
+        <a href="#tipsCrunch" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+		</ul>
+		
+	<!-- end workout search -->
+	
+	<ul data-role="listview" data-split-icon="info" data-split-theme="d" data-inset="true">
+	<li><a href="#addWOdumbbellsideraise" data-rel="popup" data-transition="slideup" data-workout="Dumbbell Side Raise" class="add-dumbbellsideraise" onClick="wo_DumbbellSideRaise()">
+        <img src="images/preview/DumbbellSideRaise.png">
+        <h2 id="woName">Dumbbell Side Raise</h2>
+        <p>Shoulders</p></a>
+        <a href="#tipsDSR" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+    <li><a href="#addWOdumbbellbicepscurl" data-rel="popup" data-transition="slideup" data-workout="Dumbbell Biceps Curl" class="add-dumbbellbicepscurl" onClick="wo_DumbbellBicepsCurl()">
+        <img src="images/preview/dumbellL.png">
+        <h2 id="woName">Dumbbell Biceps Curl</h2>
+        <p>Biceps</p></a>
+        <a href="#tipsDBC" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+    <li><a href="#addWOdumbbellwristcurl" data-rel="popup" data-transition="slideup" data-workout="Dumbbell Wrist Curl" class="add-dumbbellwristcurl" onClick="wo_DumbbellWristCurl()">
+        <img src="images/preview/DumbbellWristCurl.png">
+		<h2 id="woName">Dumbbell Wrist Curl</h2>
+		<p>Forearms</p></a>
+       <a href="#tipsDWC" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+	<li><a href="#addWObenchpressbarbell" data-rel="popup" data-transition="slideup" data-workout="Bench Press, Barbell" class="add-barbellbenchpress" onClick="wo_BarbellBenchPress()">
+        <img src="images/preview/BenchPress.png">
+		<h2 id="woName">Bench Press, Barbell</h2>
+		<p>Chest, Triceps, Front Shoulders</p></a>
+        <a href="#tipsBPB" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+	<li><a href="#addWOcrunch" data-rel="popup" data-transition="slideup" data-workout="Crunch" class="add-crunch" onClick="wo_Crunch()">
+        <img src="images/preview/Crunch.png">
+		<h2 id="woName">Crunch</h2>
+		<p>All Abs</p></a>
+        <a href="#tipsCrunch" data-rel="popup" data-position-to="window" data-transition="slidedown">Info</a>
+    </li>
+</ul>
+<!-- popups -->
+<div data-role="popup" id="addWOdumbbellsideraise" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Add Workout?</h3></center>
+	<a href="#" id="add-dumbbellsideraise" data-role="button" data-rel="back" data-theme="f" data-icon="check"  data-inline="true">Add</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="addWOdumbbellbicepscurl" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Add Workout?</h3></center>
+	<a href="#" id="add-dumbbellbicepscurl" data-role="button" data-rel="back" data-theme="f" data-icon="check"  data-inline="true">Add</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="addWOdumbbellwristcurl" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Add Workout?</h3></center>
+	<a href="#" id="add-dumbbellwristcurl" data-role="button" data-rel="back" data-theme="f" data-icon="check"  data-inline="true">Add</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="addWObenchpressbarbell" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Add Workout?</h3></center>
+	<a href="#" id="add-barbellbenchpress" data-role="button" data-rel="back" data-theme="f" data-icon="check"  data-inline="true">Add</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<div data-role="popup" id="addWOcrunch" data-theme="b" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;background:black;">
+	<center><h3>Add Workout?</h3></center>
+	<a href="#" id="add-crunch" data-role="button" data-rel="back" data-theme="f" data-icon="check"  data-inline="true">Add</a>
+    <a href="#" data-role="button" data-rel="back" data-inline="true">Cancel</a>
+</div>
+
+<script>
+	$(document).ready(function(){
+				$('#add-dumbbellsideraise').click(function(){
+						if(	localStorage.getItem('workouts') == null || localStorage.getItem('workouts') == 'null'){
+						
+								localStorage.setItem('workouts', $('#add-workout').attr('data-workout') );
+								$('#workout-list').append('<li id="wo_dumbbellsideraise" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Dumbbell Side Raise" onclick="wo_DumbbellSideRaise()" class="ui-link-inherit"><img src="images/preview/DumbbellSideRaise.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Dumbbell Side Raise</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOdumbbellsideraise" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOdumbbellsideraise" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}else{
+						
+								data = localStorage.getItem('workouts');
+								data += '|' + $('#add-dumbbellsideraise').attr('data-workout');
+								
+								localStorage.setItem('workouts', data );
+								$('#workout-list').append('<li id="wo_dumbbellsideraise" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Dumbbell Side Raise" onclick="wo_DumbbellSideRaise()" class="ui-link-inherit"><img src="images/preview/DumbbellSideRaise.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Dumbbell Side Raise</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOdumbbellsideraise" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOdumbbellsideraise" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}
+				});
+				
+				$('.add-dumbbellsideraise').click(function(){
+						$('#add-dumbbellsideraise').attr('data-workout', $(this).attr('data-workout') );
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#add-dumbbellbicepscurl').click(function(){
+						if(	localStorage.getItem('workouts') == null || localStorage.getItem('workouts') == 'null'){
+						
+								localStorage.setItem('workouts', $('#add-dumbbellbicepscurl').attr('data-workout') );
+								$('#workout-list').append('<li id="wo_dumbbellbicepscurl" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Dumbbell Biceps Curl" onclick="wo_DumbbellBicepsCurl()" class="ui-link-inherit"><img src="images/preview/dumbellL.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Dumbbell Biceps Curl</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOdumbbellbicepscurl" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOdumbbellbicepscurl" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}else{
+						
+								data = localStorage.getItem('workouts');
+								data += '|' + $('#add-dumbbellbicepscurl').attr('data-workout');
+								
+								localStorage.setItem('workouts', data );
+								$('#workout-list').append('<li id="wo_dumbbellbicepscurl" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Dumbbell Biceps Curl" onclick="wo_DumbbellBicepsCurl()" class="ui-link-inherit"><img src="images/preview/dumbellL.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Dumbbell Biceps Curl</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOdumbbellbicepscurl" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOdumbbellbicepscurl" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}
+				});
+
+				$('.add-dumbbellbicepscurl').click(function(){
+						$('#add-dumbbellbicepscurl').attr('data-workout', $(this).attr('data-workout') );
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#add-dumbbellwristcurl').click(function(){
+						if(	localStorage.getItem('workouts') == null || localStorage.getItem('workouts') == 'null'){
+						
+								localStorage.setItem('workouts', $('#add-dumbbellwristcurl').attr('data-workout') );
+								$('#workout-list').append('<li id="wo_dumbbellwristcurl" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Dumbbell Wrist Curl" onclick="wo_DumbbellWristCurl()" class="ui-link-inherit"><img src="images/preview/DumbbellWristCurl.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Dumbbell Wrist Curl</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOdumbbellwristcurl" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOdumbbellwristcurl" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}else{
+						
+								data = localStorage.getItem('workouts');
+								data += '|' + $('#add-dumbbellwristcurl').attr('data-workout');
+								
+								localStorage.setItem('workouts', data );
+								$('#workout-list').append('<li id="wo_dumbbellwristcurl" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Dumbbell Wrist Curl" onclick="wo_DumbbellWristCurl()" class="ui-link-inherit"><img src="images/preview/DumbbellWristCurl.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Dumbbell Wrist Curl</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOdumbbellwristcurl" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOdumbbellwristcurl" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}
+				});
+
+				$('.add-dumbbellwristcurl').click(function(){
+						$('#add-dumbbellwristcurl').attr('data-workout', $(this).attr('data-workout') );
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#add-barbellbenchpress').click(function(){
+						if(	localStorage.getItem('workouts') == null || localStorage.getItem('workouts') == 'null'){
+						
+								localStorage.setItem('workouts', $('#add-barbellbenchpress').attr('data-workout') );
+								$('#workout-list').append('<li id="wo_barbellbenchpress" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Bench Press, Barbell" onclick="wo_BarbellBenchPress()" class="ui-link-inherit"><img src="images/preview/BenchPress.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Bench Press, Barbell</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWObarbellbenchpress" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWObarbellbenchpress" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}else{
+						
+								data = localStorage.getItem('workouts');
+								data += '|' + $('#add-benchpressbarbell').attr('data-workout');
+								
+								localStorage.setItem('workouts', data );
+								$('#workout-list').append('<li id="wo_barbellbenchpress" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Bench Press, Barbell" onclick="wo_BarbellBenchPress()" class="ui-link-inherit"><img src="images/preview/BenchPress.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Bench Press, Barbell</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWObarbellbenchpress" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWObarbellbenchpress" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}
+				});
+
+				$('.add-benchpressbarbell').click(function(){
+						$('#add-benchpressbarbell').attr('data-workout', $(this).attr('data-workout') );
+					//	alert($(this).attr('data-workout'));
+				});
+				
+				$('#add-crunch').click(function(){
+						if(	localStorage.getItem('workouts') == null || localStorage.getItem('workouts') == 'null'){
+						
+								localStorage.setItem('workouts', $('#add-crunch').attr('data-workout') );
+								$('#workout-list').append('<li id="wo_crunch" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Crunch" onclick="wo_Crunch()" class="ui-link-inherit"><img src="images/preview/Crunch.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Crunch</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOcrunch" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOcrunch" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}else{
+						
+								data = localStorage.getItem('workouts');
+								data += '|' + $('#add-crunch').attr('data-workout');
+								
+								localStorage.setItem('workouts', data );
+								$('#workout-list').append('<li id="wo_crunch" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="false" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li ui-li-has-alt ui-li-has-thumb ui-first-child ui-last-child ui-btn-up-d"><div class="ui-btn-inner ui-li ui-li-has-alt"><div class="ui-btn-text"><a href="#pgAnimation" data-transition="pop" data-workout="Crunch" onclick="wo_Crunch()" class="ui-link-inherit"><img src="images/preview/Crunch.png" class="ui-li-thumb"><h2 id="woName" class="ui-li-heading">Crunch</h2><p class="ui-li-desc">Status: Pending Workout</p></a></div></div><a href="#removeWOcrunch" data-rel="popup" data-position-to="window" data-transition="pop" title="delete" class="ui-li-link-alt ui-btn ui-btn-up-d ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="d" aria-haspopup="true" aria-owns="removeWOcrunch" aria-expanded="false"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="delete" data-iconpos="notext" data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner"><span class="ui-btn-text"></span><span class="ui-icon ui-icon-delete ui-icon-shadow">&nbsp;</span></span></span></span></a></li>');
+					
+						}
+				});
+
+				$('.add-crunch').click(function(){
+						$('#add-crunch').attr('data-workout', $(this).attr('data-workout') );
+					//	alert($(this).attr('data-workout'));
+				});
+
+	});
+	</script>
+<!-- end popups -->
+
+<!--Tips-->
+
+<div data-role="popup" id="tipsDSR" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:100%;" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Info</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <center><h3 class="ui-title">Dumbbell Side Raise</h3></center>
+        <p>1. Pick a couple of dumbbells and stand with a straight torso and the dumbbells by your side at arms length with the palms of the hand facing you. This will be your starting position.</p>
+		<p>2. While maintaining the torso in a stationary position (no swinging), lift the dumbbells to your side with a slight bend on the elbow and the hands slightly tilted forward as if pouring water in a glass. Continue to go up until you arms are parallel to the floor. Exhale as you execute this movement and pause for a second at the top.</p>
+		<p>3. Lower the dumbbells back down slowly to the starting position as you inhale.</p>
+		<p>4. Repeat for the recommended amount of repetitions.</p>
+		<center><i>Variation: This exercise can also be performed sitting down.</i></center>
+       <center><a href="#" data-role="button" data-icon="check" data-inline="true" data-rel="back" data-theme="f">Got it</a></center>
+    </div>
+</div>
+
+<div data-role="popup" id="tipsDBC" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:100%;" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Info</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <center><h3 class="ui-title">Dumbbell Biceps Curl</h3></center>
+        <p>1. Stand (torso upright) with a dumbbell in each hand held at arms length. The elbows should be close to the torso and the palms of your hand should be facing your thighs.</p>
+		<p>2. While holding the upper arm stationary, curl the right weight as you rotate the palm of the hands until they are facing forward. At this point continue contracting the biceps as you breathe out until your biceps is fully contracted and the dumbbells are at shoulder levell. Hold the contracted position for a second as you squeeze the biceps. Tip: Only the forearms should move.</p>
+		<p>3. Slowly begin to bring the dumbbell back to the starting position as your breathe in. Tip: Remember to twist the palms back to the starting position (facing your thighs) as you come down.</p>
+		<p>4. Repeat the movement with the left hand. This equals one repetition.</p>
+		<p>5. Continue alternating in this manner for the recommended amount of repetitions.</p>
+		<i>Variations:
+		There are many possible variations for this movement. For instance, you can perform the exercise sitting down on a bench with or without back support and you can also perform it using both arms at the same time. Additionally, you may perform it with a starting position in which both palms are facing forward. In this case, you may alternate the arms as well, or perform at the same time.
+		You can also do the exercise starting with both palms of the hands facing the torso and then rotating forward as the movement is performed. At the top of the movement the palms should face forward and the small finger should be higher than the thumb for a peak contraction.
+		Just like the Dumbbell Biceps Curl except you alternate each hand, curling one dumbbell at a time.</i>
+        <center><a href="#" data-role="button" data-icon="check" data-inline="true" data-rel="back" data-theme="f">Got it</a></center>
+    </div>
+</div>
+
+<div data-role="popup" id="tipsDWC" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:100%;" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Info</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <center><h3 class="ui-title">Dumbbell Wrist Curl</h3></center>
+        <p>1. Start out by placing two dumbbells on the floor in front of a flat bench.</p>
+		<p>2. Sit down on the edge of the flat bench with your legs at about shoulder width apart. Make sure to keep your feet on the floor.</p>
+		<p>3. Use your arms to grab both of the dumbbells and bring them up so that your forearms are resting against your thighs with the palms of the hands facing up. Your wrists should be hanging over the edge of your thighs.</p>
+		<p>4. Start out by curling your wrist upwards and exhaling.</p>
+		<p>5. Slowly lower your wrists back down to the starting position while inhaling. Make sure to inhale during this part of the exercise. Tip: Your forearms should be stationary as your wrist is the only movement needed to perform this exercise.</p>
+		<p>6. Repeat for the recommended amount of repetitions.</p>
+		<p>7. When finished, simply lower the dumbbells to the floor.</p>
+		<center><i>Variations:
+		This exercise can also be performed using a barbell instead of a dumbbell.
+		You can also focus on one arm at a time to isolate the forearms.</i></center>
+       <center><a href="#" data-role="button" data-icon="check" data-inline="true" data-rel="back" data-theme="f">Got it</a></center>
+    </div>
+</div>
+
+<div data-role="popup" id="tipsBPB" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:100%;" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Info</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <center><h3 class="ui-title">Bench Press, Barbell</h3></center>
+        <p>1. Lie back on a flat bench. Using a medium width grip (a grip that creates a 90-degree angle in the middle of the movement between the forearms and the upper arms), lift the bar from the rack and hold it straight over you with your arms locked. This will be your starting position.</p>
+		<p>2. From the starting position, breathe in and begin coming down slowly until the bar touches your middle chest.</p>
+		<p>3. After a brief pause, push the bar back to the starting position as you breathe out. Focus on pushing the bar using your chest muscles. Lock your arms and squeeze your chest in the contracted position at the top of the motion, hold for a second and then start coming down slowly again. <i>Tip: Ideally, lowering the weight should take about twice as long as raising it.</i></p>
+		<p>4. Repeat the movement for the prescribed amount of repetitions.</p>
+		<p>5. When you are done, place the bar back in the rack.</p>
+		<b><font color="red">Caution:</font></b>
+		If you are new at this exercise, it is advised that you use a spotter. If no spotter is available, then be conservative with the amount of weight used.
+		Also, beware of letting the bar drift too far forward. You want the bar to touch your middle chest and nowhere else.
+		Don't bounce the weight off your chest. You should be in full control of the barbell at all times.
+       <center><a href="#" data-role="button" data-icon="check" data-inline="true" data-rel="back" data-theme="f">Got it</a></center>
+    </div>
+</div>
+
+<div data-role="popup" id="tipsCrunch" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:100%;" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Info</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <center><h3 class="ui-title">Crunch</h3></center>
+        <p>1. Lie on the floor with your back flat and knees bent with around a 60-degree angle between the hamstrings and the calves.</p>
+		<p>2. Keep your feet flat on the floor and stretch your arms overhead with your palms crossed. This will be your starting position.</p>
+		<p>3. Curl your upper body forward and bring your shoulder blades just off the floor. At all times, keep your arms aligned with your head, neck and shoulder. Don't move them forward from that position. Exhale as you perform this portion of the movement and hold the contraction for a second.</p>
+		<p>4. Slowly lower down to the starting position as you inhale.</p>
+		<p>5. Repeat for the recommended amount of repetitions.</p>
+		<center><i>Variations: For the most advanced lifters, a weighted plate can be held in your hands</i></center>
+       <center><a href="#" data-role="button" data-icon="check" data-inline="true" data-rel="back" data-theme="f">Got it</a></center>
+    </div>
+</div>
+
+<!--end Tips-->
+
+<!--
+<br>
+	<div id="WOlist">
+	<div class="ui-grid-c">
+    <div class="ui-block-a" style="width:55%"><div class="ui-bar ui-bar-d"><center><b>Workout</b></center></div></div>
+    <div class="ui-block-b" style="width:15%"><div class="ui-bar ui-bar-d"><center><b>A</b></center></div></div>
+    <div class="ui-block-c" style="width:15%"><div class="ui-bar ui-bar-d"><center><b>B</b></center></div></div>
+    <div class="ui-block-d" style="width:15%"><div class="ui-bar ui-bar-d"><center><b>C</b></center></div></div>
+	</div>
+	
+	<div id="workout-list"></div>
+		
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a"><a href="#" id="WOcommit" data-role="button" data-theme="d">Commit</a></div>
+			<div class="ui-block-b"><a href="#" id="WOreset" data-role="button" data-theme="d">Reset</a></div>
+		</fieldset>
+			
+				<script>
+				$(document).ready(function(){
+					$('#WOcommit').click(function(){
+						alert();
+					});
+				
+				
+					$('#WOreset').click(function(){
+						$('#workout-list').html('');
+					});
+				});
+				
+				</script>
+		
+					
+	</div>
+-->
+	</div>
+	
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- Hints and Tips -->
+<div data-role="page" data-theme="d" id="hnt">
+<div data-role="panel" data-theme="b" data-display="push" id="settings" data-position="right" data-position-fixed="true"> 
+	<center>
+						<a href="#" onclick="sound()" style="margin:0 auto;">
+							<img src="images/on.png" alt="" id="test"/>
+						</a>		
+						
+						<br/><br/>
+			</center>
+	</div>
+
+	<div data-role="panel" data-theme="b" id="menu" data-display="push" data-position-fixed="true">
+	<ul data-role="listview" data-inset="false" data-theme="d">
+	<li>
+	<center><image src="images/EmsGymLogoWord.png" alt="Em's Gym Logo" style="width:100%;height:100%"></image></center>
+	</li>
+    <li><a href="#calendar2" data-transition="pop">
+        <img src="images/optWO.png">
+        <h2>Workout</h2>
+        <p>Do a workout</p></a>
+    </li>
+    <li><a href="#dds" data-transition="pop">
+        <img src="images/opt6.png">
+        <h2>Hints and Tips</h2>
+        <p>Things you should know</p></a>
+    </li>
+	<li><a href="#pgBMImtrc" data-transition="pop">
+        <img src="images/optBMI.png">
+        <h2>BMI Calculator</h2>
+        <p>Calculates your BMI</p></a></li><li><a href="#pgUser" data-transition="pop"><img src="images/optStatus.png"><h2>User Profile</h2><p>Check your overall status</p></a></li><li><a href="#about" data-transition="pop">
+        <img src="images/opt5.png">
+        <h2>About Us</h2>
+        <p>More about Em's Gym</p></a>
+    </li>
+	<li><a href="#developers" data-transition="pop">
+        <img src="images/optDev.png">
+        <h2>Developers</h2>
+        <p>People behind this app</p></a>
+    </li>
+</ul>
+	</div>
+	<div data-role="header">
+		<h1>Hints and Tips</h1>
+	<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+	</div>
+	
+	<div data-role="content" >
+		
+			<a href="#dds" data-role="button" data-theme="d" data-icon="star" data-iconpos="top" data-transition="pop"><b>Do's and Dont's</b></a>
+			<a href="#trivia" data-role="button" data-theme="d" data-icon="star" data-iconpos="top" onclick="goBack()"><b>Trivias</b></a>
+		
+</div>
+	<div data-role="footer" data-position="fixed" data-theme="d">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a href="#menu" data-mini="true" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="bars" data-iconpos="top">Menu</a></li>
+			<li><a href="#main" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="home" data-iconpos="top">Home</a></li>
+			<li><a href="#settings" data-iconpos="notext" data-inline="true" data-role="button" class="ui-btn ui-btn-inline" data-icon="gear" data-iconpos="top">Settings</a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+<!-- Do's and Don'ts -->
+<div data-role="page" id="dds" data-theme="d">
+	<div data-role="header">
+		<h1>THE WEIGHT ROOM</h1>
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Respect the headphones</h2></center>
+		<center><font size="large" align="justify">Singles, feel free to mingle, but when those ear buds are in, consider that fair warning. Ms. Independent is game - for the leg press, that is.</font></center>
+	</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a data-role="button" data-icon="arrow-l" data-iconpos="top"  onclick="goBack()" class="ui-disabled"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds2" data-role="button" data-icon="arrow-r" data-iconpos="top" data-mini="true" data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 2 -->
+<div data-role="page" id="dds2" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE WEIGHT ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Wax on, wax off</h2></center>
+		<center><font size="large" align="justify">Sure, we may have hit the gym to avoid doing housework, but wiping down machines is a chore with serious payoffs. (No one wants a side of germs and infectious skin diseases with their workout.)</font></center>
+	</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds3" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 3 -->
+<div data-role="page" id="dds3" data-theme="d">
+	<div data-role="header">
+			
+		
+		<h1>THE WEIGHT ROOM</h1>
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Lift a finger</h2></center>
+		<center><font size="large" align="justify">More chores, we know... But returning free weights, medicine balls, and other equipment to their proper place is more than courteous - it might burn a few extra calories, too!</font></center>	
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds4" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 4 -->
+<div data-role="page" id="dds4" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE WEIGHT ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Mind the mirror</h2></center>
+		<center><font size="large" align="justify">Leave the lip gloss application, ab adoration, and smizing for the boudoir. Gym mirrors are there for form and safety, so avoid crossing in front of Mr. Military Press mid-set.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds5" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 5 -->
+<div data-role="page" id="dds5" data-theme="d">
+	<div data-role="header">
+	
+		<h1>THE WEIGHT ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Get in the zone</h2></center>
+		<center><font size="large" align="justify">The right one, that is. From bicep curls to power cleans, there's a proper place for everything at the gym - and trust us, you don't want to learn the hard way.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds6" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 6 -->
+<div data-role="page" id="dds6" data-theme="d">
+	<div data-role="header">
+	
+		<h1>THE WEIGHT ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Share!</h2></center>
+		<center><font size="large" align="justify">Sometimes there just aren't enough toys for everyone. Let a stranger "work in" And rather than standing idly by, maximize your time and efforts with a few killer supersets.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds7" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 7 -->
+<div data-role="page" id="dds7" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE WEIGHT ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Easy does it</h2></center>
+		<center><font size="large" align="justify">While every gym has its own policy, most prefer it to be earthquake-free. Avoid dropping heavy weights like hot cakes - and leave excessive grunting off the menu, too.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds8" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 8 -->
+<div data-role="page" id="dds8" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE CARDIO ZONE</h1>
+		
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Don't let it all hang out</h2></center>
+		<center><font size="large" align="justify">While it's unlikely grandma's showing up, Cardio Sculpt is a long ways from Woodstock. To keep things kosher, keep those goodies under wraps.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds9" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 9 -->
+<div data-role="page" id="dds9" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE CARDIO ZONE</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Give some breathing room</h2></center>
+		<center><font size="large" align="justify">It's no secret that cardio can get a little sticky-icky sometimes. So when there's a choice of seven free treadmills, is it really necessary to cozy up right next to Ultra-Marathon Man? Try opting for a solo run instead. (In short give some SPACE!)</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds10" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 10 -->
+<div data-role="page" id="dds10" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE CARDIO ZONE</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Get mobile without the mobile phone</h2></center>
+		<center><font size="large" align="justify">Chatting on a treadmill is a recipe for road kill. Of course there are exceptions, including firing up fitness apps like Runkeeeper or Fitbit to stay on track.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds11" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 11 -->
+<div data-role="page" id="dds11" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE CARDIO ZONE</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Play it straight</h2></center>
+		<center><font size="large" align="justify">Interval training aside, keep the treadmill stunts to a minimum (unless of course you're these guys).</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds12" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 12 -->
+<div data-role="page" id="dds12" data-theme="d">
+	<div data-role="header">
+	
+		<h1>THE CARDIO ZONE</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>No spitting, snot rocketing, or other barnyard behavior</h2></center>
+		<center><font size="large" align="justify"> This should go without saying, but spend enough time in a gym and you're bound to see it once. Do not pass go; proceed directly to the hand sanitizer (stank face optional).</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds13" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 13 -->
+<div data-role="page" id="dds13" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE CARDIO ZONE</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>No disappearing acts</h2></center>
+		<center><font size="large" align="justify">Saving seats was so not fair in middle school - and not much has changed since then. So don't expect that towel, water bottle, or fanny pack (workout fashion 911!) to mean "dibs" on the elliptical.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds14" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 14 -->
+<div data-role="page" id="dds14" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE LOCKER ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Put hygiene first</h2></center>
+		<center><font size="large" align="justify">While some people are actually allergic to deodorant, for the rest of us, there's no excuse for smelling like those gym socks - everywhere. And no, cologne or eau de anything isn't exactly a quick fix. </font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds15" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 15 -->
+<div data-role="page" id="dds15" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE LOCKER ROOM</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Groom in private</h2></center>
+		<center><font size="large" align="justify">Flossing, tweezing, and blow-drying anything but the hair on your head is a big locker room no-no. When in doubt, save the iffy stuff for the homestead.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds16" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 16 -->
+<div data-role="page" id="dds16" data-theme="d">
+	<div data-role="header">
+	
+		<h1>THE LOCKER ROOM</h1>
+		
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Hide the salami</h2></center>
+		<center><font size="large" align="justify">Seriously. Not everyone grew up in a naked home. Lounging, stretching, and chit chatting in the buff might feel fantastic, but not for everyone involved. We all need boundaries, right?</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds17" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 17 -->
+<div data-role="page" id="dds17" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE LOCKER ROOM</h1>
+		
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Pack it up</h2></center>
+		<center><font size="large" align="justify">Bench hogs, take note: Sneakers, gym bags, laptops, and lap dogs don’t all deserve a spot on the bench. During peak hours especially, lock up those belongings to give fellow gym-goers space to suit up.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds18" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 18 -->
+<div data-role="page" id="dds18" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE STUDIO</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Arrive early</h2></center>
+		<center><font size="large" align="justify">Fashionably late doesn't apply when it comes to group classes. Plan to arrive at least five minutes early to find a spot and settle in without disruption.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds19" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 19 -->
+<div data-role="page" id="dds19" data-theme="d">
+	<div data-role="header">
+	
+		<h1>THE STUDIO</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Stagger</h2></center>
+		<center><font size="large" align="justify">Sun salutations should be PG, so make sure the arms and legs can extend fully - without feeling up your neighbor. Like on public transportation, there's really no excuse for an improper touch.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds20" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 20 -->
+<div data-role="page" id="dds20" data-theme="d">
+	<div data-role="header">
+
+		<h1>THE STUDIO</h1>
+		
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Go with the flow</h2></center>
+		<center><font size="large" align="justify">Class energy matters, so go ahead and chant those Intensati affirmations - but not in meditation class. There's a time and a place for ohm-ing, panting, and screaming out reps.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds21" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 21 -->
+<div data-role="page" id="dds21" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE STUDIO</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>No peeping Toms!</h2></center>
+		<center><font size="large" align="justify">Maybe Tom was late. Or maybe he's just taking notes. Chances are, though, the ladies (and gents) of Pole Dancing 101 aren't appreciating the hard-core ogling from the other side of the window.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds22" data-role="button" data-icon="arrow-r" data-iconpos="top"  data-transition="slide" ><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<!-- DDS page 22 -->
+<div data-role="page" id="dds22" data-theme="d">
+	<div data-role="header">
+		
+		<h1>THE STUDIO</h1>
+			
+		<ul data-role="listview"  id="hntSearch" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Search..." data-inset="true">
+			<li><a href="#dds">1. THE WEIGHT ROOM : Respect the headphones</a></li>
+			<li><a href="#dds2">2. THE WEIGHT ROOM : Wax on, wax off</a></li>
+			<li><a href="#dds3">3. THE WEIGHT ROOM : Lift a finger</a></li>
+			<li><a href="#dds4">4. THE WEIGHT ROOM : Mind the mirror</a></li>
+			<li><a href="#dds5">5. THE WEIGHT ROOM : Get in the zone</a></li>
+			<li><a href="#dds6">6. THE WEIGHT ROOM : Share!</a></li>
+			<li><a href="#dds7">7. THE WEIGHT ROOM : Easy does it</a></li>
+			<li><a href="#dds8">8. THE CARDIO ZONE : Don't let it all hang out</a></li>
+			<li><a href="#dds9">9. THE CARDIO ZONE : Give some breathing room</a></li>
+			<li><a href="#dds10">10. THE CARDIO ZONE : Get mobile without the mobile phone</a></li>
+			<li><a href="#dds11">11. THE CARDIO ZONE : Play it straight</a></li>
+			<li><a href="#dds12">12. THE CARDIO ZONE : No spitting, snot rocketing, or other barnyard behavior</a></li>
+			<li><a href="#dds13">13. THE CARDIO ZONE : No disappearing acts</a></li>
+			<li><a href="#dds14">14. THE LOCKER ROOM : Put hygiene first</a></li>
+			<li><a href="#dds15">15. THE LOCKER ROOM : Groom in private</a></li>
+			<li><a href="#dds16">16. THE LOCKER ROOM : Hide the salami</a></li>
+			<li><a href="#dds17">17. THE LOCKER ROOM : Pack it up</a></li>
+			<li><a href="#dds18">18. THE STUDIO : Arrive early</a></li>
+			<li><a href="#dds19">19. THE STUDIO : Stagger</a></li>
+			<li><a href="#dds20">20. THE STUDIO : Go with the flow</a></li>
+			<li><a href="#dds21">21. THE STUDIO : No peeping Toms!</a></li>
+			<li><a href="#dds22">22. THE STUDIO : Be kind</a></li>
+		</ul>
+		<center><image src="images/dds.jpg" alt="Do's and Don'ts" style="height:100%;width:100%"></image></center>
+	</div>
+	<div data-role="content">
+		<center><h2>Be kind</h2></center>
+		<center><font size="large" align="justify">Now this applies to all areas of the gym: Smile, be courteous, and even try saying "hi." (Using words instead of grunts or whistles is almost always preferable). The gym may not be the happiest place on earth (that's Disney World, right?), but it can't hurt to try.</font></center>
+</div>
+	<div data-role="footer" data-id="btnNav" data-position="fixed">
+	<div data-role="navbar" id="navbar">
+		<ul>
+			<li><a type="button" value="BACK" data-icon="arrow-l" data-iconpos="top" onclick="goBack()"><b>PREVIOUS</b></a></li>
+			<li><a href="#main" data-role="button" data-theme="d" data-icon="home" data-iconpos="top" data-transition="pop"><b>HOME</b></a></li>
+			<li><a href="#dds3" data-role="button" data-icon="arrow-r" data-iconpos="top" class="ui-disabled"><b>NEXT</b></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+
+
+</body>
+</html>
