@@ -24,9 +24,9 @@
 
 	
 	
-    <icon src="icon.jpg" />
+    <icon src="icon.png" />
    
-    <gap:splash src="splash.jpg" />
+    <gap:splash src="splash.png" />
   
 	<feature name="Device">
         <param name="android-package" value="portrait" />
