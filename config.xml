@@ -9,7 +9,7 @@
     <name>Ems Virtual Gym</name>
 	
 
-    <author href="http://gcccs.org/emsgym/" rim:copyright="Copyright 2013">dotjar team</author>
+    <author href="http://gcccs.org/emsgym/" gap:copyright="Copyright 2013">dotjar team</author>
  
     <preference name="permissions" value="none"/>
 	
