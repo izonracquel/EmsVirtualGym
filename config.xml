@@ -1,36 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
-	<widget xmlns="http://www.w3.org/ns/widgets" xmlns:rim="http://www.blackberry.com/ns/widgets" version="1.0.0.0" id="ems">
- 
-	<author href="http://gcccs.org/emsgym/" rim:copyright="Copyright 2013">dotjar team</author>
- 
-	<name>Ems Virtual Gym</name>
- 
-	<description>
-		Ems Virtual Gym
-	</description>
- 
-	<access uri="http://gcccs.org/emsgym/" subdomains="true">
-		<feature id="blackberry.app" version="1.0.0.0" required="true"/>
-		<feature id="blackberry.invoke" version="1.0.0.0" required="true"/>
-	</access>
+<?xml version="1.0" encoding="UTF-8"?>
 
-	<rim:orientation mode="portrait"/>
+
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "ems"
+        version   = "1.0.0">
+
+    <name>Ems Virtual Gym</name>
 	
-	<icon src="images/EmsIcon150x150.png" />
+
+    <author href="http://gcccs.org/emsgym/" rim:copyright="Copyright 2013">dotjar team</author>
+ 
+    <preference name="permissions" value="none"/>
+	dfddfd
 	
-	<rim:splash src="splash.png" /> 
-	<content src="index.html" />
+	
+    <preference name="phonegap-version" value="2.9.0" />          
+    <preference name="orientation" value="portrait" />
+    <preference name="target-device" value="universal" /> 
+    <preference name="fullscreen" value="true" />
+    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-installLocation" value="auto" />
 
-	<feature id="blackberry.ui.dialog"/>
+	
+	
+    <icon src="icon.jpg" />
+   
+    <gap:splash src="splash.jpg" />
+  
+	<feature name="Device">
+        <param name="android-package" value="portrait" />
+    </feature>
 
-	<feature id="blackberry.app">
-	<param name="orientation" value="portrait" />
-	</feature>
+	
+    <access origin="http://127.0.0.1*"/>
 
- 
-	<rim:permissions>
-		<rim:permit>access_shared</rim:permit>
-		<rim:permit>access_location_services</rim:permit>
-	</rim:permissions>
- 
 </widget>
